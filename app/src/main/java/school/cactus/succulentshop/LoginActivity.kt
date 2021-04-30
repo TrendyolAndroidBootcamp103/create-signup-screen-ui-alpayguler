@@ -1,6 +1,7 @@
 package school.cactus.succulentshop
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import school.cactus.succulentshop.databinding.ActivityLoginBinding
@@ -23,20 +24,22 @@ class LoginActivity : AppCompatActivity() {
                 passwordInputLayout.validate()
                 identifierInputLayout.validate()
             }
+            createAccountButton.setOnClickListener {
+                navigateActivity(SignUpActivity::class.java)
+            }
         }
     }
 
     private fun TextInputLayout.validate() {
         val errorMessage = validator().validate(editText!!.text.toString())
-        error = errorMessage?.resolveAsString()
+        error = errorMessage?.resolveAsString(context)
         isErrorEnabled = errorMessage != null
     }
-
-    private fun Int.resolveAsString() = getString(this)
 
     private fun TextInputLayout.validator() = when (this) {
         binding.identifierInputLayout -> identifierValidator
         binding.passwordInputLayout -> passwordValidator
-        else -> throw IllegalArgumentException("Cannot find any validator for the given TextInputLayout")
+        else -> throw IllegalArgumentException(getString(R.string.cannot_find_any_validator_message))
     }
+
 }
